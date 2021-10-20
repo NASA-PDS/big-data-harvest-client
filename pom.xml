@@ -34,17 +34,10 @@ POSSIBILITY OF SUCH DAMAGE.
 -->
 
 
-<!--
-👉 This is the TEMPLATE project object model or `pom.xml` file.
-
-Go through this file line-by-line and replace the template values with your own.
--->
-
 <project xmlns='http://maven.apache.org/POM/4.0.0'
          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
          xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd'>
 
-    <!-- POM-specific metadata -->
     <modelVersion>4.0.0</modelVersion>
 
     <!--
@@ -58,35 +51,21 @@ Go through this file line-by-line and replace the template values with your own.
         <version>1.12.0</version>
     </parent>
   
-    <!-- My project metadata here -->
     <properties>
-        <!-- Obviously put in your own project name instead of `myproject` -->
-        <project-name>myproject</project-name>
-
-        <!-- You'll want a Unicode-type encoding here in almost every case -->
+        <project-name>Big Data Harvest Client</project-name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!--
-    Maven "coordinates" that identify this package uniquely in the entire universe; the group identifies an 
-    organizational unit (by reverse domain name) that produced the artifact:
-    -->
     <groupId>gov.nasa.pds</groupId>
-    <!--
-    The next part of the Maven coorindate is the name of the artifact, its "artifact ID". Note we cannot use
-    any expression here, as tempting as it would be to use ${project-name} here:
-    -->
-    <artifactId>myproject</artifactId>
-    <!-- The third part of the Maven coorindate is the version identifier of the artifact: -->
+    <artifactId>big-data-harvest-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <!-- The final part is the kind: here we make a `jar`, but there's `war`, `ejb`, `ear`, `maven-plugin`, etc.: -->
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project-name}</name>
     <description>
         Put a short paragraph-sized summary of the project here.
     </description>
-    <!-- Check the calendar -->
+
     <inceptionYear>2021</inceptionYear>
     <url>https://nasa-pds.github.io/${project-name}</url>
     <issueManagement>
@@ -100,76 +79,91 @@ Go through this file line-by-line and replace the template values with your own.
         <tag>main</tag>
     </scm>
 
-    <!-- Put the packages your project depends on here -->
     <dependencies>
-        <!-- If you do any kind of testing—and you should—use Junit, which is the gold standard for Java -->
+        <!-- TEST ONLY: JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.0-M1</version>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!--
-        Here's an example dependency; you can find dependencies at https://search.maven.org. This isn't
-        actually used by this template, but is shown full-fleshed out because chances are your project
-        will need at least one if not many dependencies.
-        -->
+        <!-- Command line interface / parameters -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-numbers-primes</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>false</optional>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
 
     <build>
-        <!--
-        Resources (files) are non-code parts of a project that the code-parts access during run time; these
-        should be bundled in a jar (or war, or whatever) and get specified here
-        -->
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>example.properties</include>
-                </includes>
-                <targetPath>gov/nasa/pds/mypackage</targetPath>
-            </resource>
-            <!-- You can give <testResources> for resources needed during the test phase -->
-        </resources>
-
-        <!--
-        Plugins tell Maven how to operate the various lifecycle phases; include extra as needed, such
-        as for CORBA stub generation from `.idl` files, or even more modern things.
-        -->
         <plugins>
-            <!--
-            Other plugins get inherited, such as maven-compiler-plugin and maver-surefire-plugin,
-            so we don't need to repeat them here.
-
-            This plugin below makes this package an *executable* jar. If you want to make a plain jar, adjust
-            the parameters below; or use a different plugin to get a differnt kind of artifact.
-
-            You can find some plugins at: https://maven.apache.org/plugins/
-            Note that other plugins exist and may be published elsewhere.
-            -->
+            <!-- Add POM version to JAR's manifest -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Main-Class>gov.nasa.pds.mypackage.Main</Main-Class>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            <!-- SpringBoot single JAR executable. -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.5.RELEASE</version>
+                <configuration>
+                    <mainClass>gov.nasa.pds.harvest.HarvestClientMain</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>exec-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Binary release (ZIP and tar.gz). -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bin-release</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/zip-assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Disable Site for now -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                    <skipDeploy>true</skipDeploy>
+                </configuration>
+            </plugin>
+            <!-- Java Docs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
             </plugin>
         </plugins>
