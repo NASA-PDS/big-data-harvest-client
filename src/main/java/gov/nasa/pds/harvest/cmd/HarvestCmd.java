@@ -2,15 +2,22 @@ package gov.nasa.pds.harvest.cmd;
 
 import java.io.File;
 import java.util.UUID;
-import java.util.logging.LogManager;
 
 import org.apache.commons.cli.CommandLine;
 
+import gov.nasa.pds.harvest.cfg.Configuration;
+import gov.nasa.pds.harvest.cfg.ConfigurationReader;
+import gov.nasa.pds.harvest.job.JobReader;
+import gov.nasa.pds.harvest.job.model.Job;
 import gov.nasa.pds.harvest.util.Logger;
 
 
 public class HarvestCmd implements CliCommand
 {
+    private Configuration cfg;
+    private Job job;
+    
+    
     public HarvestCmd()
     {
     }
@@ -19,8 +26,6 @@ public class HarvestCmd implements CliCommand
     @Override
     public void run(CommandLine cmdLine) throws Exception
     {
-        String runId = UUID.randomUUID().toString();
-
         if(cmdLine.hasOption("help"))
         {
             printHelp();
@@ -28,10 +33,19 @@ public class HarvestCmd implements CliCommand
         }
 
         configure(cmdLine);
-
+        publish();
     }
 
 
+    private void publish()
+    {
+        String jobId = UUID.randomUUID().toString();
+        Logger.info("Creating job " + jobId);
+        
+        Logger.info("Done");
+    }
+    
+    
     /**
      * Print help screen.
      */
@@ -56,25 +70,15 @@ public class HarvestCmd implements CliCommand
         // Job file
         String fileName = cmdLine.getOptionValue("j");
         if(fileName == null) throw new Exception("Missing required parameter '-j'");
-        readJobFile(fileName);
-        
-        
+        job = readJobFile(fileName);
+                
         // Configuration file
         fileName = cmdLine.getOptionValue("c");
-        readConfigFile(fileName);
-        
-        //ConfigReader cfgReader = new ConfigReader();        
-        //cfg = cfgReader.read(cfgFile);
-        
-        
-        
-        //DataPublisher pub = new DataPublisher(cfg, runId);                
-        
-        //Logger.info("Run (Package) ID: " + runId);        
+        cfg = readConfigFile(fileName);
     }
     
     
-    private void readConfigFile(String fileName) throws Exception
+    private Configuration readConfigFile(String fileName) throws Exception
     {
         File file = getConfigFile(fileName);
         if(!file.exists()) 
@@ -83,12 +87,13 @@ public class HarvestCmd implements CliCommand
         }
 
         Logger.info("Reading configuration from " + file.getAbsolutePath());        
-
         
+        ConfigurationReader reader = new ConfigurationReader();
+        return reader.read(file);
     }
     
     
-    private void readJobFile(String fileName) throws Exception
+    private Job readJobFile(String fileName) throws Exception
     {
         File file = new File(fileName);
         if(!file.exists()) 
@@ -96,7 +101,10 @@ public class HarvestCmd implements CliCommand
             throw new Exception("Job file " + file.getAbsolutePath() + " does not exist");
         }
         
+        Logger.info("Reading job from " + file.getAbsolutePath());        
         
+        JobReader reader = new JobReader();
+        return reader.read(file);
     }
     
     

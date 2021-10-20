@@ -184,6 +184,9 @@ public class HarvestCli
 
         bld = Option.builder("c").hasArg().argName("file");
         options.addOption(bld.build());
+        
+        bld = Option.builder("j").hasArg().argName("file");
+        options.addOption(bld.build());
     }
     
     
