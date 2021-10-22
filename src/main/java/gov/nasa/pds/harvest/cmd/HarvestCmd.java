@@ -9,6 +9,7 @@ import gov.nasa.pds.harvest.cfg.Configuration;
 import gov.nasa.pds.harvest.cfg.ConfigurationReader;
 import gov.nasa.pds.harvest.job.JobReader;
 import gov.nasa.pds.harvest.job.model.Job;
+import gov.nasa.pds.harvest.mq.JobMessageBuilder;
 import gov.nasa.pds.harvest.util.Logger;
 
 
@@ -16,6 +17,8 @@ public class HarvestCmd implements CliCommand
 {
     private Configuration cfg;
     private Job job;
+    private boolean overwriteFlag;
+    private String jobId;
     
     
     public HarvestCmd()
@@ -37,12 +40,29 @@ public class HarvestCmd implements CliCommand
     }
 
 
-    private void publish()
+    private void publish() throws Exception
     {
-        String jobId = UUID.randomUUID().toString();
+        jobId = UUID.randomUUID().toString();
         Logger.info("Creating job " + jobId);
+    
+        // Create new job message
+        String msg = createNewJobMessage();
+        
         
         Logger.info("Done");
+    }
+    
+    
+    private String createNewJobMessage() throws Exception
+    {
+        JobMessageBuilder bld = new JobMessageBuilder(false);
+        bld.setJob(jobId, job);
+        bld.setOverwriteFlag(overwriteFlag);
+        String json = bld.build();
+             
+        Logger.debug("Job message: " + json);
+        
+        return json;
     }
     
     
@@ -60,7 +80,8 @@ public class HarvestCmd implements CliCommand
         System.out.println("  -j <path>   Harvest job file");
         System.out.println();
         System.out.println("Optional parameters:");
-        System.out.println("  -c <path>   Harvest Client configuration file. Default is $HARVEST_CLIENT_HOME/conf/harvest.cfg");
+        System.out.println("  -c <path>    Harvest Client configuration file. Default is $HARVEST_CLIENT_HOME/conf/harvest.cfg");
+        System.out.println("  -overwrite   Overwrite registered products");
         System.out.println();
     }
 
@@ -75,6 +96,8 @@ public class HarvestCmd implements CliCommand
         // Configuration file
         fileName = cmdLine.getOptionValue("c");
         cfg = readConfigFile(fileName);
+        
+        overwriteFlag = cmdLine.hasOption("overwrite");
     }
     
     
@@ -130,5 +153,5 @@ public class HarvestCmd implements CliCommand
 
         return file;
     }
-
+    
 }

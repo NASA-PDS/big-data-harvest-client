@@ -15,13 +15,23 @@ public class Logger
     
     /**
      * Set logging level
-     * @param level level
+     * @param level logging level
      */
     public static void setLevel(int level)
     {
         Logger.level = level;
     }
     
+
+    /**
+     * Get logging level
+     * @return logging level
+     */
+    public static int getLevel()
+    {
+        return level;
+    }
+
     
     /**
      * Print debug message

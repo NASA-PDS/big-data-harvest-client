@@ -67,6 +67,8 @@ public class HarvestCli
             printHelp();
             System.exit(1);
         }
+        
+        initLogger();
 
         if(!runCommand())
         {
@@ -153,11 +155,9 @@ public class HarvestCli
         
         System.out.println();
         System.out.println("Options:");
-        System.out.println("  -help           Print help for a command");
-        
-        System.out.println();
-        System.out.println("Pass -help after any command to see command-specific usage information, for example,");
-        System.out.println("  harvest-client harvest -help");
+        System.out.println("  -v <value>   Log verbosity: DEBUG, INFO, WARN, ERROR. Default is INFO.");
+        System.out.println("  -help        Pass -help after any command to see command-specific usage information, for example,");
+        System.out.println("               harvest-client harvest -help");
     }
     
     
@@ -187,6 +187,12 @@ public class HarvestCli
         
         bld = Option.builder("j").hasArg().argName("file");
         options.addOption(bld.build());
+
+        bld = Option.builder("overwrite");
+        options.addOption(bld.build());
+        
+        bld = Option.builder("v").hasArg().argName("level");
+        options.addOption(bld.build());
     }
     
     
@@ -202,6 +208,37 @@ public class HarvestCli
         {
             System.out.println("Build time: " + attrs.getValue("Build-Time"));
         }
+    }
+
+    
+    private void initLogger()
+    {
+        String verbosity = cmdLine.getOptionValue("v", "INFO");
+        int level = parseLogLevel(verbosity);
+        Logger.setLevel(level);
+    }
+
+    
+    private static int parseLogLevel(String verbosity)
+    {
+        // Logger is not setup yet. Print to console.
+        if(verbosity == null)
+        {
+            System.out.println("[WARN] Log verbosity is not set. Will use 'INFO'.");
+            return Logger.LEVEL_INFO;
+        }
+        
+        switch(verbosity.toUpperCase())
+        {
+        case "DEBUG": return Logger.LEVEL_DEBUG;
+        case "INFO": return Logger.LEVEL_INFO;
+        case "WARN": return Logger.LEVEL_WARN;
+        case "ERROR": return Logger.LEVEL_ERROR;
+        }
+
+        // Logger is not setup yet. Print to console.
+        System.out.println("[WARN] Invalid log verbosity '" + verbosity + "'. Will use 'INFO'.");
+        return Logger.LEVEL_INFO;
     }
 
 }
