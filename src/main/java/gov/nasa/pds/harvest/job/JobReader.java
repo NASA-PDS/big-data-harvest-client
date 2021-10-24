@@ -8,6 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import gov.nasa.pds.harvest.job.model.Job;
+import gov.nasa.pds.harvest.job.parser.AutogenParser;
 import gov.nasa.pds.harvest.job.parser.BundleConfigParser;
 import gov.nasa.pds.harvest.job.parser.DirsParser;
 import gov.nasa.pds.harvest.job.parser.FileInfoParser;
@@ -61,11 +62,18 @@ public class JobReader
         
         validate(root);
         
+        // Bundles (<bundles>)
         if(bundlesCount > 0) job.bundles = BundleConfigParser.parseBundles(root);
+        // Directories (<directories>)
         if(dirsCount > 0) job.dirs = DirsParser.parseDirectories(root);
         
+        // Product filters (<includeClass> / <excludeClass>)
         FiltersParser.parseFilters(doc, job);
+        // File info (<FileRef replacePrefix.../>
         job.fileRefs = FileInfoParser.parseFileInfo(doc);
+        
+        // Autogen fields (/autogenFields/dateFields/field)
+        job.dateFields = AutogenParser.parseDateFields(doc);
 
         return job;
     }

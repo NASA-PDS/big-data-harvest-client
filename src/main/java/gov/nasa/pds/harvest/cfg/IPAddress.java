@@ -16,7 +16,7 @@ public class IPAddress
         return host;
     }
     
-    public int getport()
+    public int getPort()
     {
         return port;
     }

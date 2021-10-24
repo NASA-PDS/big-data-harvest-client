@@ -78,6 +78,9 @@ public class JobMessageBuilder
             }
         }
         
+        // Date Fields (/autogenFields/dateFields/field)
+        msg.dateFields = job.dateFields;
+        
         return gson.toJson(msg);
     }
 }

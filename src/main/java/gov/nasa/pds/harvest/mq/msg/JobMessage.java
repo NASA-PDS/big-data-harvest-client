@@ -13,6 +13,7 @@ public class JobMessage
     
     public Set<String> prodClassInclude;
     public Set<String> prodClassExclude;
+    public Set<String> dateFields;
     
     public List<String> fileRefs;
 

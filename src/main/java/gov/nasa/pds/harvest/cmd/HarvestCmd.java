@@ -1,15 +1,26 @@
 package gov.nasa.pds.harvest.cmd;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 
+import com.rabbitmq.client.Address;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
+
+import gov.nasa.pds.harvest.Constants;
 import gov.nasa.pds.harvest.cfg.Configuration;
 import gov.nasa.pds.harvest.cfg.ConfigurationReader;
+import gov.nasa.pds.harvest.cfg.IPAddress;
 import gov.nasa.pds.harvest.job.JobReader;
 import gov.nasa.pds.harvest.job.model.Job;
 import gov.nasa.pds.harvest.mq.JobMessageBuilder;
+import gov.nasa.pds.harvest.util.CloseUtils;
 import gov.nasa.pds.harvest.util.Logger;
 
 
@@ -43,24 +54,57 @@ public class HarvestCmd implements CliCommand
     private void publish() throws Exception
     {
         jobId = UUID.randomUUID().toString();
-        Logger.info("Creating job " + jobId);
+        Logger.info("Creating new job...");
     
         // Create new job message
         String msg = createNewJobMessage();
         
+        // Connect to RabbitMQ
+        Connection con = null;
         
-        Logger.info("Done");
+        try
+        {
+            Logger.info("Connecting to RabbitMQ");
+            con = connectToRabbitMQ();
+            Channel channel = con.createChannel();
+            
+            channel.txSelect();
+            channel.basicPublish("", Constants.MQ_JOBS, 
+                    MessageProperties.MINIMAL_PERSISTENT_BASIC, msg.getBytes());
+            channel.txCommit();
+        }
+        finally
+        {
+            CloseUtils.close(con);
+        }
+
+        Logger.info("Created job " + jobId);
+    }
+    
+    
+    private Connection connectToRabbitMQ() throws Exception
+    {
+        ConnectionFactory factory = new ConnectionFactory();
+        
+        List<Address> rmqAddr = new ArrayList<>();
+        for(IPAddress ipa: cfg.mqAddresses)
+        {
+            rmqAddr.add(new Address(ipa.getHost(), ipa.getPort()));
+        }
+
+        Connection con = factory.newConnection(rmqAddr);
+        return con;
     }
     
     
     private String createNewJobMessage() throws Exception
     {
-        JobMessageBuilder bld = new JobMessageBuilder(false);
+        JobMessageBuilder bld = new JobMessageBuilder(Logger.getLevel() == Logger.LEVEL_DEBUG);
         bld.setJob(jobId, job);
         bld.setOverwriteFlag(overwriteFlag);
         String json = bld.build();
              
-        Logger.debug("Job message: " + json);
+        Logger.debug("Job message:\n" + json);
         
         return json;
     }
