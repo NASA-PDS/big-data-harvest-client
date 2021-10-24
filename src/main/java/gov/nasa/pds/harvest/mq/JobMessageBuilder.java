@@ -10,6 +10,11 @@ import gov.nasa.pds.harvest.job.model.Job;
 import gov.nasa.pds.harvest.mq.msg.JobMessage;
 
 
+/**
+ * Creates job messages to be sent to RabbitMQ.
+ * 
+ * @author karpenko
+ */
 public class JobMessageBuilder
 {
     private Gson gson;
@@ -19,6 +24,10 @@ public class JobMessageBuilder
     private boolean overwriteFlag = false;
     
     
+    /**
+     * Constructor
+     * @param pretty Generate pretty-formatted JSON files. Used for debugging.
+     */
     public JobMessageBuilder(boolean pretty)
     {
         if(pretty)
@@ -32,6 +41,11 @@ public class JobMessageBuilder
     }
 
     
+    /**
+     * Set job information
+     * @param jobId job ID. Usually this is auto-generated UUID.
+     * @param job job information extracted from XML configuration file.
+     */
     public void setJob(String jobId, Job job)
     {
         this.jobId = jobId;
@@ -39,12 +53,21 @@ public class JobMessageBuilder
     }
     
     
+    /**
+     * Set to true to overwrite existing documents in the Registry
+     * @param flag boolean flag.
+     */
     public void setOverwriteFlag(boolean flag)
     {
         this.overwriteFlag = flag;
     }
     
 
+    /**
+     * Build new harvest job message to be sent to RabbitMQ.
+     * @return JSON string.
+     * @throws Exception an exception
+     */
     public String build() throws Exception
     {
         // Validation

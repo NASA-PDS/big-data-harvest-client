@@ -39,7 +39,7 @@ public class JobReader
     
     
     /**
-     * Read Harvest configuration file.
+     * Read Harvest job configuration file.
      * @param file Configuration file
      * @return Configuration model object
      * @throws Exception Generic exception

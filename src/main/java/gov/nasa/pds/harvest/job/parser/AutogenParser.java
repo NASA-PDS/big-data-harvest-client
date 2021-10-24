@@ -13,6 +13,12 @@ import gov.nasa.pds.harvest.util.xml.XPathUtils;
  */
 public class AutogenParser
 {
+    /**
+     * Parse '/harvest/autogenFields/dateFields/field' section of harvest job file
+     * @param doc XML DOM
+     * @return a collection of date field names
+     * @throws Exception an exception
+     */
     public static Set<String> parseDateFields(Document doc) throws Exception
     {
         XPathUtils xpu = new XPathUtils();

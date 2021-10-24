@@ -13,6 +13,12 @@ import gov.nasa.pds.harvest.util.xml.XPathUtils;
  */
 public class FiltersParser
 {
+    /**
+     * Parse "/harvest/productFilter" section of harvest job configuration file.
+     * @param doc
+     * @param job
+     * @throws Exception
+     */
     public static void parseFilters(Document doc, Job job) throws Exception
     {
         parseProductFilter(doc, job);

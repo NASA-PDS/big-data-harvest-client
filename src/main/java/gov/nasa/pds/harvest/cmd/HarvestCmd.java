@@ -24,6 +24,10 @@ import gov.nasa.pds.harvest.util.CloseUtils;
 import gov.nasa.pds.harvest.util.Logger;
 
 
+/**
+ * A CLI command to submit (publish to RabbitMQ) new harvest job. 
+ * @author karpenko
+ */
 public class HarvestCmd implements CliCommand
 {
     private Configuration cfg;
@@ -32,11 +36,20 @@ public class HarvestCmd implements CliCommand
     private String jobId;
     
     
+    /**
+     * Constructor
+     */
     public HarvestCmd()
     {
     }
 
-    
+
+    /**
+     * Run this command.
+     * @param cmdLine Apache Commons CLI library's class 
+     * containing parsed command line parameters.
+     * @throws Exception Generic exception
+     */
     @Override
     public void run(CommandLine cmdLine) throws Exception
     {
@@ -51,6 +64,10 @@ public class HarvestCmd implements CliCommand
     }
 
 
+    /**
+     * Publish new job message to RabbitMQ
+     * @throws Exception an exception
+     */
     private void publish() throws Exception
     {
         jobId = UUID.randomUUID().toString();

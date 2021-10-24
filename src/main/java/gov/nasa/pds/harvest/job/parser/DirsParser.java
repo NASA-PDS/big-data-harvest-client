@@ -16,6 +16,12 @@ import gov.nasa.pds.harvest.util.xml.XmlDomUtils;
  */
 public class DirsParser
 {
+    /**
+     * Parses "/harvest/directories" section.
+     * @param root root DOM element
+     * @return a list of directories
+     * @throws Exception an exception
+     */
     public static List<String> parseDirectories(Node root) throws Exception
     {
         int count = XmlDomUtils.countChildNodes(root, "directories");

@@ -21,6 +21,12 @@ import gov.nasa.pds.harvest.util.xml.XmlDomUtils;
  */
 public class BundleConfigParser
 {
+    /**
+     * Parses "/harvest/bundles" section of a harvest job file.
+     * @param root root DOM element
+     * @return a list of bundle directories
+     * @throws Exception an exception
+     */
     public static List<String> parseBundles(Node root) throws Exception
     {
         int count = XmlDomUtils.countChildNodes(root, "bundles");

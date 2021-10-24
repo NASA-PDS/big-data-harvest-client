@@ -8,17 +8,30 @@ import gov.nasa.pds.harvest.util.CloseUtils;
 import gov.nasa.pds.harvest.util.Logger;
 
 
+/**
+ * Reads Harvest client configuration file.
+ * @author karpenko
+ */
 public class ConfigurationReader
 {
     private static final String PROP_MQ_HOST = "mq.host";
     private static final IPAddress DEFAULT_MQ_HOST = new IPAddress("localhost", 5672);
     
     
+    /**
+     * Constructor
+     */
     public ConfigurationReader()
     {
     }
 
 
+    /**
+     * Read configuration file (Java properties / key-value file)
+     * @param file a configuration file
+     * @return parsed configuration
+     * @throws Exception an exception
+     */
     public Configuration read(File file) throws Exception
     {
         Configuration cfg = parseConfigFile(file);
