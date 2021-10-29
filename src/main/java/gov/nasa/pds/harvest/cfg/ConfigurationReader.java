@@ -45,6 +45,19 @@ public class ConfigurationReader
     public Configuration read(File file) throws Exception
     {
         Configuration cfg = parseConfigFile(file);
+        validate(cfg);
+        
+        return cfg;
+    }
+    
+    
+    private void validate(Configuration cfg) throws Exception
+    {
+        if(cfg.mqType == null)
+        {
+            String msg = String.format("Invalid configuration. Property '%s' is not set.", PROP_MQ_TYPE);
+            throw new Exception(msg);
+        }
         
         switch(cfg.mqType)
         {
@@ -55,8 +68,6 @@ public class ConfigurationReader
             validateRMQ(cfg.rmqCfg);
             break;
         }
-        
-        return cfg;
     }
     
     

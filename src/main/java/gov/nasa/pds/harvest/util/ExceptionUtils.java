@@ -22,8 +22,9 @@ public class ExceptionUtils
         {
             tw = tw.getCause();
         }
-        
-        return tw.getMessage();
+
+        String msg = tw.getMessage();
+        return (msg == null) ? ex.toString() : msg;
     }
 
 }
