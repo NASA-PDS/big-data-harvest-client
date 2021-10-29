@@ -110,6 +110,13 @@ POSSIBILITY OF SUCH DAMAGE.
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.32</version>
         </dependency>
+
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>activemq-client</artifactId>
+    <version>5.16.3</version>
+</dependency>
+
     </dependencies>
 
     <build>

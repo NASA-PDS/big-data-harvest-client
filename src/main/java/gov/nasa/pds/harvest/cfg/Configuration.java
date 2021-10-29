@@ -1,8 +1,5 @@
 package gov.nasa.pds.harvest.cfg;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * Harvest client configuration
@@ -11,7 +8,17 @@ import java.util.List;
 public class Configuration
 {
     /**
-     * List of RabbitMQ addresses (host and port tuples)
+     * Message server type
      */
-    public List<IPAddress> mqAddresses = new ArrayList<>();
+    public MQType mqType;
+    
+    /**
+     * ActiveMQ configuration
+     */
+    public ActiveMQCfg amqCfg = new ActiveMQCfg();
+    
+    /**
+     * RabbitMQ configuration
+     */
+    public RabbitMQCfg rmqCfg = new RabbitMQCfg();
 }

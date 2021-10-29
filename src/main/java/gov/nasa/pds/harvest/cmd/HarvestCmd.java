@@ -1,26 +1,18 @@
 package gov.nasa.pds.harvest.cmd;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 
-import com.rabbitmq.client.Address;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
-
-import gov.nasa.pds.harvest.Constants;
 import gov.nasa.pds.harvest.cfg.Configuration;
 import gov.nasa.pds.harvest.cfg.ConfigurationReader;
-import gov.nasa.pds.harvest.cfg.IPAddress;
 import gov.nasa.pds.harvest.job.JobReader;
 import gov.nasa.pds.harvest.job.model.Job;
-import gov.nasa.pds.harvest.mq.JobMessageBuilder;
-import gov.nasa.pds.harvest.util.CloseUtils;
+import gov.nasa.pds.harvest.mq.ActiveMQPublisher;
+import gov.nasa.pds.harvest.mq.MQPublisher;
+import gov.nasa.pds.harvest.mq.RabbitMQPublisher;
+import gov.nasa.pds.harvest.mq.msg.JobMessageBuilder;
 import gov.nasa.pds.harvest.util.Logger;
 
 
@@ -76,41 +68,37 @@ public class HarvestCmd implements CliCommand
         // Create new job message
         String msg = createNewJobMessage();
         
-        // Connect to RabbitMQ
-        Connection con = null;
+        MQPublisher pub = createPublisher(cfg);
         
         try
         {
-            Logger.info("Connecting to RabbitMQ");
-            con = connectToRabbitMQ();
-            Channel channel = con.createChannel();
-            
-            channel.txSelect();
-            channel.basicPublish("", Constants.MQ_JOBS, 
-                    MessageProperties.MINIMAL_PERSISTENT_BASIC, msg.getBytes());
-            channel.txCommit();
+            pub.publish(msg);
         }
         finally
         {
-            CloseUtils.close(con);
+            pub.close();
         }
 
         Logger.info("Created job " + jobId);
     }
     
     
-    private Connection connectToRabbitMQ() throws Exception
+    private MQPublisher createPublisher(Configuration cfg) throws Exception
     {
-        ConnectionFactory factory = new ConnectionFactory();
-        
-        List<Address> rmqAddr = new ArrayList<>();
-        for(IPAddress ipa: cfg.mqAddresses)
+        if(cfg == null || cfg.mqType == null)
         {
-            rmqAddr.add(new Address(ipa.getHost(), ipa.getPort()));
+            throw new Exception("Invalid configuration. Message server type is not set.");
         }
-
-        Connection con = factory.newConnection(rmqAddr);
-        return con;
+        
+        switch(cfg.mqType)
+        {
+        case ActiveMQ:
+            return new ActiveMQPublisher(cfg.amqCfg);
+        case RabbitMQ:
+            return new RabbitMQPublisher(cfg.rmqCfg);
+        }
+        
+        throw new Exception("Invalid message server type: " + cfg.mqType);
     }
     
     

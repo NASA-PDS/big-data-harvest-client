@@ -1,4 +1,4 @@
-package gov.nasa.pds.harvest.mq;
+package gov.nasa.pds.harvest.mq.msg;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder;
 
 import gov.nasa.pds.harvest.job.model.FileRefCfg;
 import gov.nasa.pds.harvest.job.model.Job;
-import gov.nasa.pds.harvest.mq.msg.JobMessage;
 
 
 /**

@@ -14,9 +14,19 @@ import gov.nasa.pds.harvest.util.Logger;
  */
 public class ConfigurationReader
 {
-    private static final String PROP_MQ_HOST = "mq.host";
-    private static final IPAddress DEFAULT_MQ_HOST = new IPAddress("localhost", 5672);
+    private static final String PROP_MQ_TYPE = "mq.type";
     
+    private static final String PROP_RMQ_HOST = "rmq.host";
+    private static final String PROP_RMQ_USER = "rmq.user";
+    private static final String PROP_RMQ_PASS = "rmq.password";
+
+    private static final String PROP_AMQ_URL = "amq.url";
+    private static final String PROP_AMQ_USER = "amq.user";
+    private static final String PROP_AMQ_PASS = "amq.password";
+    
+    private static final IPAddress DEFAULT_RMQ_HOST = new IPAddress("localhost", 5672);
+    private static final String DEFAULT_AMQ_URL = "tcp://localhost:61616";
+
     
     /**
      * Constructor
@@ -35,17 +45,43 @@ public class ConfigurationReader
     public Configuration read(File file) throws Exception
     {
         Configuration cfg = parseConfigFile(file);
-    
-        // Validate MQ address
-        if(cfg.mqAddresses.isEmpty())
+        
+        switch(cfg.mqType)
         {
-            cfg.mqAddresses.add(DEFAULT_MQ_HOST);
-            String msg = String.format("'%s' property is not set. Will use default value: %s", 
-                    PROP_MQ_HOST, DEFAULT_MQ_HOST.toString());
-            Logger.warn(msg);
+        case ActiveMQ:
+            validateAMQ(cfg.amqCfg);
+            break;
+        case RabbitMQ:
+            validateRMQ(cfg.rmqCfg);
+            break;
         }
         
         return cfg;
+    }
+    
+    
+    private void validateRMQ(RabbitMQCfg cfg) throws Exception
+    {
+        // Validate MQ address
+        if(cfg.addresses.isEmpty())
+        {
+            cfg.addresses.add(DEFAULT_RMQ_HOST);
+            String msg = String.format("'%s' property is not set. Will use default value: %s", 
+                    PROP_RMQ_HOST, DEFAULT_RMQ_HOST.toString());
+            Logger.warn(msg);
+        }
+    }
+
+    
+    private void validateAMQ(ActiveMQCfg cfg) throws Exception
+    {
+        if(cfg.url == null || cfg.url.isBlank())
+        {
+            cfg.url = DEFAULT_AMQ_URL;
+            String msg = String.format("'%s' property is not set. Will use default value: %s", 
+                    PROP_AMQ_URL, cfg.url);
+            Logger.warn(msg);
+        }
     }
     
     
@@ -70,9 +106,32 @@ public class ConfigurationReader
                 
                 switch(key)
                 {
-                case PROP_MQ_HOST:
-                    cfg.mqAddresses.add(parseMQAddresses(value));
+                case PROP_MQ_TYPE:
+                    cfg.mqType = parseMQType(value);
                     break;
+                    
+                // RabbitMQ
+                case PROP_RMQ_HOST:
+                    cfg.rmqCfg.addresses.add(parseMQAddresses(value));
+                    break;
+                case PROP_RMQ_USER:
+                    cfg.rmqCfg.userName = value;
+                    break;
+                case PROP_RMQ_PASS:
+                    cfg.rmqCfg.password = value;
+                    break;
+
+                // ActiveMQ
+                case PROP_AMQ_URL:
+                    cfg.amqCfg.url = value;
+                    break;
+                case PROP_AMQ_USER:
+                    cfg.amqCfg.userName = value;
+                    break;
+                case PROP_AMQ_PASS:
+                    cfg.amqCfg.password = value;
+                    break;
+                    
                 default:
                     throw new Exception("Invalid property '" + key + "'");
                 }
@@ -87,12 +146,23 @@ public class ConfigurationReader
     }
 
     
+    private MQType parseMQType(String str) throws Exception
+    {
+        if("ActiveMQ".equalsIgnoreCase(str)) return MQType.ActiveMQ;
+        if("RabbitMQ".equalsIgnoreCase(str)) return MQType.RabbitMQ;
+        
+        String msg = String.format("Invalid '%s' property value: '%s'. Expected 'ActiveMQ' or 'RabbitMQ'.", 
+                PROP_MQ_TYPE, str);
+        throw new Exception(msg);
+    }
+    
+    
     private IPAddress parseMQAddresses(String str) throws Exception
     {
         String[] tokens = str.split(":");
         if(tokens.length != 2) 
         {
-            String msg = String.format("Invalid '%s' property: '%s'. Expected 'host:port' value.", PROP_MQ_HOST, str);
+            String msg = String.format("Invalid '%s' property value: '%s'. Expected 'host:port'.", PROP_RMQ_HOST, str);
             throw new Exception(msg);
         }
         
@@ -105,7 +175,7 @@ public class ConfigurationReader
         }
         catch(Exception ex)
         {
-            String msg = String.format("Invalid port in '%s' property: '%s'", PROP_MQ_HOST, str);
+            String msg = String.format("Invalid port in '%s' property: '%s'", PROP_RMQ_HOST, str);
             throw new Exception(msg);
         }
             
