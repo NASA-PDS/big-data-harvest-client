@@ -167,6 +167,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         </goals>
                         <configuration>
                             <descriptors>
+                                <descriptor>src/main/assembly/tar-assembly.xml</descriptor>
                                 <descriptor>src/main/assembly/zip-assembly.xml</descriptor>
                             </descriptors>
                         </configuration>

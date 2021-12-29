@@ -154,7 +154,7 @@ public class HarvestCli
         System.out.println("  -V, --version   Print Harvest Client version");
         
         System.out.println();
-        System.out.println("Options:");
+        System.out.println("Optional parameters:");
         System.out.println("  -v <value>   Log verbosity: DEBUG, INFO, WARN, ERROR. Default is INFO.");
         System.out.println("  -help        Pass -help after any command to see command-specific usage information, for example,");
         System.out.println("               harvest-client harvest -help");
