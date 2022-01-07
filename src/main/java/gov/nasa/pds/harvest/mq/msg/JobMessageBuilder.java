@@ -83,7 +83,18 @@ public class JobMessageBuilder
         msg.dirs = new ArrayList<>();
         if(job.dirs != null) msg.dirs.addAll(job.dirs);
         if(job.bundles != null) msg.dirs.addAll(job.bundles);
-        if(msg.dirs.isEmpty()) throw new Exception("Job must have directories or bundles.");
+        if(msg.dirs.isEmpty()) msg.dirs = null;
+        
+        // Manifests
+        if(job.manifests != null && !job.manifests.isEmpty())
+        {
+            msg.manifests = job.manifests;
+        }
+        
+        if(msg.dirs == null && msg.manifests == null)
+        {
+            throw new Exception("Job must have directories, bundles, or manifest files.");
+        }
         
         // Product filters
         msg.prodClassInclude = job.prodClassInclude;

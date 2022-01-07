@@ -15,6 +15,7 @@ public class Job
     
     public List<String> bundles;
     public List<String> dirs;
+    public List<String> manifests;
     
     public List<FileRefCfg> fileRefs;
 

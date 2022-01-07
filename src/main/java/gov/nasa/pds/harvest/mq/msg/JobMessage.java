@@ -25,7 +25,12 @@ public class JobMessage
      * List of directories to process
      */
     public List<String> dirs;
-    
+
+    /**
+     * List of manifest files (file lists) to process
+     */
+    public List<String> manifests;
+
     /**
      * Product class filter. List of classes to include.
      */

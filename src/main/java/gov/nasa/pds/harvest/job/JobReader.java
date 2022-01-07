@@ -12,6 +12,7 @@ import gov.nasa.pds.harvest.job.parser.AutogenParser;
 import gov.nasa.pds.harvest.job.parser.BundleConfigParser;
 import gov.nasa.pds.harvest.job.parser.DirsParser;
 import gov.nasa.pds.harvest.job.parser.FileInfoParser;
+import gov.nasa.pds.harvest.job.parser.FileSetParser;
 import gov.nasa.pds.harvest.job.parser.FiltersParser;
 import gov.nasa.pds.harvest.job.parser.NodeNameValidator;
 import gov.nasa.pds.harvest.util.xml.XmlDomUtils;
@@ -28,6 +29,7 @@ public class JobReader
     
     private int bundlesCount = 0;
     private int dirsCount = 0;
+    private int filesCount = 0;
     
 
     /**
@@ -66,6 +68,8 @@ public class JobReader
         if(bundlesCount > 0) job.bundles = BundleConfigParser.parseBundles(root);
         // Directories (<directories>)
         if(dirsCount > 0) job.dirs = DirsParser.parseDirectories(root);
+        // Files (manifests)
+        if(filesCount > 0) job.manifests = FileSetParser.parseFiles(root);
         
         // Product filters (<includeClass> / <excludeClass>)
         FiltersParser.parseFilters(doc, job);
@@ -105,6 +109,9 @@ public class JobReader
                 case "bundles":
                     bundlesCount++;
                     break;
+                case "files":
+                    filesCount++;
+                    break;
                 case "productFilter":
                     break;
                 case "fileInfo":
@@ -119,9 +126,18 @@ public class JobReader
             }
         }
         
-        if(bundlesCount == 0 && dirsCount == 0)
+        int totalCount = bundlesCount + dirsCount + filesCount;
+        
+        if(totalCount > 1)
         {
-            throw new Exception(ERROR + "Either '/harvest/bundles' or '/harvest/directories' element is required.");
+            throw new Exception(ERROR + "Could only have one of '/harvest/bundles', "
+                    + "'/harvest/directories' or '/harvest/files' elements at the same time.");
+        }
+
+        if(totalCount == 0)
+        {
+            throw new Exception(ERROR + "One of '/harvest/bundles', '/harvest/directories', "
+                    + "or '/harvest/files' elements is required.");
         }
     }
 }
