@@ -30,7 +30,7 @@
 
 FROM openjdk:11-slim
 
-# Set following arguments with a compatible Big Data Harvest Client version
+# Set following argument with a compatible Big Data Harvest Client version
 ARG big_data_harvest_client_version=1.0.0-SNAPSHOT
 
 # Install curl

@@ -40,7 +40,7 @@
 # Update the following environment variables before executing this script
 
 # Absolute path for the Harvest job file in the host machine (E.g.: /tmp/cfg/harvest-job-config.xml)
-HARVEST_JOB_CFG_FILE=/tmp/cfg/harvest-job-config.xml
+HARVEST_JOB_CONFIG_FILE=/tmp/cfg/harvest-job-config.xml
 
 # Absolute path for the Harvest data directory in the host machine (E.g.: /tmp/data/urn-nasa-pds-insight_rad)
 HARVEST_DATA_DIR=/tmp/data
@@ -50,10 +50,10 @@ HARVEST_CLIENT_CONFIG_FILE=/tmp/cfg/harvest-client.cfg
 
 
 # Check if the Harvest job file exists
-if [ ! -f "$HARVEST_JOB_CFG_FILE" ]; then
-    echo "Error: The Harvest job file $HARVEST_JOB_CFG_FILE does not exist." \
+if [ ! -f "$HARVEST_JOB_CONFIG_FILE" ]; then
+    echo "Error: The Harvest job file $HARVEST_JOB_CONFIG_FILE does not exist." \
             "Set an absolute file path for an existing Harvest job file in the $0 file" \
-            "as the environment variable 'HARVEST_JOB_CFG_FILE'." 1>&2
+            "as the environment variable 'HARVEST_JOB_CONFIG_FILE'." 1>&2
     exit 1
 fi
 
@@ -76,7 +76,7 @@ fi
 # Execute docker container run with actual data
 docker container run --name big-data-harvest-client \
            --rm \
-           --volume "${HARVEST_JOB_CFG_FILE}":/cfg/harvest-job-config.xml \
+           --volume "${HARVEST_JOB_CONFIG_FILE}":/cfg/harvest-job-config.xml \
            --volume "${HARVEST_DATA_DIR}":/data \
            --volume "${HARVEST_CLIENT_CONFIG_FILE}":/cfg/harvest-client.cfg \
            nasapds/big-data-harvest-client
