@@ -14,7 +14,7 @@ import gov.nasa.pds.harvest.job.model.Job;
  * 
  * @author karpenko
  */
-public class JobMessageBuilder
+public class HarvestJobMessageBuilder
 {
     private Gson gson;
     
@@ -27,7 +27,7 @@ public class JobMessageBuilder
      * Constructor
      * @param pretty Generate pretty-formatted JSON files. Used for debugging.
      */
-    public JobMessageBuilder(boolean pretty)
+    public HarvestJobMessageBuilder(boolean pretty)
     {
         if(pretty)
         {
@@ -74,7 +74,7 @@ public class JobMessageBuilder
         if(job == null) throw new Exception("Job is not set.");
         
         // Create the message
-        JobMessage msg = new JobMessage();
+        HarvestJobMessage msg = new HarvestJobMessage();
         msg.jobId = jobId;
         msg.nodeName = job.nodeName;
         msg.overwrite = overwriteFlag;

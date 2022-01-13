@@ -150,8 +150,9 @@ public class HarvestCli
 
         System.out.println();
         System.out.println("Commands:");
-        System.out.println("  harvest         Submit new harvest job");
-        System.out.println("  -V, --version   Print Harvest Client version");
+        System.out.println("  harvest              Submit new harvest job");
+        System.out.println("  set-archive-status   Set product archive status");
+        System.out.println("  -V, --version        Print Harvest Client version");
         
         System.out.println();
         System.out.println("Optional parameters:");
