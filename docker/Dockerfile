@@ -33,17 +33,13 @@ FROM openjdk:11-slim
 # Set following argument with a compatible Big Data Harvest Client version
 ARG big_data_harvest_client_version=1.0.0-SNAPSHOT
 
-# Install curl
-RUN apt-get update -y
-RUN apt-get install curl -y
-
 ENV BIG_DATA_HARVEST_CLIENT_BIN_PATH=https://github.com/NASA-PDS/big-data-harvest-client/releases/download/v${big_data_harvest_client_version}/big-data-harvest-client-${big_data_harvest_client_version}-bin.tar.gz
 
 # Install Big Data Harvest Client
 ADD $BIG_DATA_HARVEST_CLIENT_BIN_PATH /tmp/big-data-harvest-client-bin.tar.gz
-RUN  mkdir /opt/big-data-harvest-client  \
-     && tar xzf /tmp/big-data-harvest-client-bin.tar.gz  -C /opt/big-data-harvest-client --strip-components 1 \
-     && rm -f /tmp/big-data-harvest-client-bin.tar.gz
+RUN  mkdir /opt/big-data-harvest-client &&\
+     tar xzf /tmp/big-data-harvest-client-bin.tar.gz  -C /opt/big-data-harvest-client --strip-components 1 &&\
+     rm -f /tmp/big-data-harvest-client-bin.tar.gz
 ENV PATH="$PATH:/opt/big-data-harvest-client/bin"
 
 # Execute Big Data Harvest Client

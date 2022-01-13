@@ -18,7 +18,7 @@ ARG big_data_harvest_client_version=1.0.0-SNAPSHOT
 #### 3. Build the docker image as follows.
 
 ```
-docker image build -t nasapds/big-data-harvest-client .
+docker image build --tag nasapds/big-data-harvest-client .
 ```
 
 ## 🏃 Steps to run a docker container of the Big Data Harvest Client
