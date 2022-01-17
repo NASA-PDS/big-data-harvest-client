@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.apache.commons.cli.CommandLine;
 
 import gov.nasa.pds.harvest.mq.MQPublisher;
+import gov.nasa.pds.harvest.mq.msg.ManagerMessageBuilder;
 import gov.nasa.pds.harvest.util.Logger;
 
 
@@ -22,7 +23,7 @@ public class SetArchiveStatusCmd extends BaseCliCommand
 
     private String lidvid;
     private String status;
-    private String jobId;
+    private String requestId;
     
     /**
      * Constructor
@@ -103,7 +104,7 @@ public class SetArchiveStatusCmd extends BaseCliCommand
             throw new Exception("Missing required parameter '-status'");
         }
 
-        String status = tmp.toUpperCase();
+        String status = tmp.toLowerCase();
         if(!statusNames.contains(status))
         {
             throw new Exception("Invalid '-status' parameter value: '" + tmp + "'");
@@ -119,7 +120,7 @@ public class SetArchiveStatusCmd extends BaseCliCommand
      */
     private void publish() throws Exception
     {
-        jobId = UUID.randomUUID().toString();
+        requestId = UUID.randomUUID().toString();
         Logger.info("Creating new 'set-archive-status' request...");
     
         // Create new job message
@@ -129,31 +130,25 @@ public class SetArchiveStatusCmd extends BaseCliCommand
         
         try
         {
-            pub.publish(msg);
+            pub.publishManagerCommand(msg);
         }
         finally
         {
             pub.close();
         }
 
-        Logger.info("Created request " + jobId);
+        Logger.info("Created request " + requestId);
     }
 
     
     private String createNewMessage() throws Exception
     {
-        /*
-        JobMessageBuilder bld = new JobMessageBuilder(Logger.getLevel() == Logger.LEVEL_DEBUG);
-        bld.setJob(jobId, job);
-        bld.setOverwriteFlag(overwriteFlag);
-        String json = bld.build();
+        ManagerMessageBuilder bld = new ManagerMessageBuilder(Logger.getLevel() == Logger.LEVEL_DEBUG);
+        String json = bld.createSetArchiveStatusMessage(requestId, lidvid, status);
              
         Logger.debug("Job message:\n" + json);
         
         return json;
-        */
-        
-        return null;
     }
 
 }

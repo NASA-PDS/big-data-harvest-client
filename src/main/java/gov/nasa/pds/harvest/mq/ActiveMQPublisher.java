@@ -22,9 +22,13 @@ public class ActiveMQPublisher implements MQPublisher
 {
     private Connection con;
     private Session session;
-    private Destination destination;
-    private MessageProducer producer;
+
+    private Destination harvestDestination;
+    private MessageProducer harvestJobProducer;
     
+    private Destination managerDestination;
+    private MessageProducer managerCommandProducer;
+
     /**
      * Constructor
      * @param cfg ActiveMQ configuration
@@ -41,20 +45,35 @@ public class ActiveMQPublisher implements MQPublisher
             factory.setPassword(cfg.password);
         }
         
+        // Connection & session
         con = factory.createConnection();
         session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
         
-        destination = session.createQueue(Constants.MQ_JOBS);        
-        producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        // Harvest destination
+        harvestDestination = session.createQueue(Constants.MQ_HARVEST_JOBS);        
+        harvestJobProducer = session.createProducer(harvestDestination);
+        harvestJobProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        
+        // Manager destination
+        managerDestination = session.createQueue(Constants.MQ_MANAGER_COMMANDS);        
+        managerCommandProducer = session.createProducer(managerDestination);
+        managerCommandProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
     }
 
     
     @Override
-    public void publish(String message) throws Exception
+    public void publishHarvestJob(String message) throws Exception
     {
         TextMessage mqMsg = session.createTextMessage(message);
-        producer.send(mqMsg);
+        harvestJobProducer.send(mqMsg);
+    }
+
+    
+    @Override
+    public void publishManagerCommand(String message) throws Exception
+    {
+        TextMessage mqMsg = session.createTextMessage(message);
+        managerCommandProducer.send(mqMsg);
     }
 
     

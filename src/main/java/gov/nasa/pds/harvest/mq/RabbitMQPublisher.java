@@ -37,10 +37,20 @@ public class RabbitMQPublisher implements MQPublisher
 
     
     @Override
-    public void publish(String message) throws Exception
+    public void publishHarvestJob(String message) throws Exception
     {
         channel.txSelect();
-        channel.basicPublish("", Constants.MQ_JOBS, 
+        channel.basicPublish("", Constants.MQ_HARVEST_JOBS, 
+                MessageProperties.MINIMAL_PERSISTENT_BASIC, message.getBytes());
+        channel.txCommit();
+    }
+
+    
+    @Override
+    public void publishManagerCommand(String message) throws Exception
+    {
+        channel.txSelect();
+        channel.basicPublish("", Constants.MQ_MANAGER_COMMANDS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, message.getBytes());
         channel.txCommit();
     }

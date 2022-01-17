@@ -67,7 +67,7 @@ public class HarvestCmd extends BaseCliCommand
         
         try
         {
-            pub.publish(msg);
+            pub.publishHarvestJob(msg);
         }
         finally
         {

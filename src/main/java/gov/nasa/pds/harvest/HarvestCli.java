@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 
 import gov.nasa.pds.harvest.cmd.CliCommand;
 import gov.nasa.pds.harvest.cmd.HarvestCmd;
+import gov.nasa.pds.harvest.cmd.SetArchiveStatusCmd;
 import gov.nasa.pds.harvest.util.ExceptionUtils;
 import gov.nasa.pds.harvest.util.Logger;
 import gov.nasa.pds.harvest.util.ManifestUtils;
@@ -169,7 +170,9 @@ public class HarvestCli
     {
         commands = new HashMap<>();
         commands.put("harvest", new HarvestCmd());
+        commands.put("set-archive-status", new SetArchiveStatusCmd());
     }
+    
     
     /**
      * Initialize Apache Commons CLI library.
@@ -190,6 +193,12 @@ public class HarvestCli
         options.addOption(bld.build());
 
         bld = Option.builder("overwrite");
+        options.addOption(bld.build());
+
+        bld = Option.builder("status").hasArg().argName("status");
+        options.addOption(bld.build());
+
+        bld = Option.builder("lidvid").hasArg().argName("lidvid");
         options.addOption(bld.build());
         
         bld = Option.builder("v").hasArg().argName("level");
