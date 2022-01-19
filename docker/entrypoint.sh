@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright 2022, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
@@ -28,24 +30,25 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM openjdk:11-slim
+# ------------------------------------------------------------------------------
+# This shell script provides an entrypoint for the Big Data Harvest Client docker image.
+# ------------------------------------------------------------------------------
 
-# Set following argument with a compatible Big Data Harvest Client version
-ARG big_data_harvest_client_version=1.0.0-SNAPSHOT
+# Download test data to 'HARVEST_DATA_DIR', if the 'RUN_TESTS' environment variable is set to true.
+if [ "$RUN_TESTS" = "true" ]; then
 
-ENV BIG_DATA_HARVEST_CLIENT_BIN_PATH=https://github.com/NASA-PDS/big-data-harvest-client/releases/download/v${big_data_harvest_client_version}/big-data-harvest-client-${big_data_harvest_client_version}-bin.tar.gz
+  # Check if the TEST_DATA_URL environment variable is set
+  if [ -z "$TEST_DATA_URL" ]; then
+      echo "Error: 'TEST_DATA_URL' environment variable is not set. Use docker's -e option." 1>&2
+      exit 1
+  fi
 
-# Install Big Data Harvest Client
-ADD $BIG_DATA_HARVEST_CLIENT_BIN_PATH /tmp/big-data-harvest-client-bin.tar.gz
-RUN  apt-get update -y &&\
-     apt-get install curl -y &&\
-     mkdir /opt/big-data-harvest-client &&\
-     tar xzf /tmp/big-data-harvest-client-bin.tar.gz  -C /opt/big-data-harvest-client --strip-components 1 &&\
-     rm -f /tmp/big-data-harvest-client-bin.tar.gz &&\
-     apt-get autoclean --quiet --yes &&\
-     rm -rf /var/lib/apt/lists/*
-ENV PATH="$PATH:/opt/big-data-harvest-client/bin"
+  rm -rf /data/*
+  mkdir /data/test-data
+  curl -o /tmp/harvest-test-data.tar.gz "$TEST_DATA_URL"
+  tar xzf /tmp/harvest-test-data.tar.gz -C /data/test-data --strip-components 1
+  rm -f /tmp/harvest-test-data.tar.gz
+fi
 
-# Entry point
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["bash", "/usr/local/bin/entrypoint.sh"]
+# Execute Big Data Harvest Client
+harvest-client harvest -j /cfg/harvest-job-config.xml -c /cfg/harvest-client.cfg
