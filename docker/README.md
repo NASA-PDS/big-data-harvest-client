@@ -54,17 +54,17 @@ Make sure to update the `/path/to/archive` in the Harvest job file to point to a
 
 | Variable                   | Description |
 | -------------------------- | ----------- |
-| HARVEST_JOB_CONFIG_FILE    | Absolute path for the Harvest job file in the host machine (E.g.: `/tmp/cfg/harvest-job-config.xml`) |
-| HARVEST_DATA_DIR           | Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
-| HARVEST_CLIENT_CONFIG_FILE | Absolute path for the Big Data Harvest Client configuration file in the host machine (E.g.: `/tmp/conf/harvest-client.cfg`) |
+| HARVEST_JOB_CONFIG_FILE    | Absolute path of the Harvest job file in the host machine (E.g.: `/tmp/cfg/harvest-job-config.xml`) |
+| HARVEST_DATA_DIR           | Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
+| HARVEST_CLIENT_CONFIG_FILE | Absolute path of the Big Data Harvest Client configuration file in the host machine (E.g.: `/tmp/conf/harvest-client.cfg`) |
 
 ```    
 # Update the following environment variables before executing this script
 
-# Absolute path for the Harvest job file in the host machine (E.g.: /tmp/cfg/harvest-job-config.xml)
+# Absolute path of the Harvest job file in the host machine (E.g.: /tmp/cfg/harvest-job-config.xml)
 HARVEST_JOB_CONFIG_FILE=/tmp/cfg/harvest-job-config.xml
 
-# Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
+# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
 # If the Big Data Harvest Client is executed with the option to download test data, then this directory will be
 # cleaned-up and populated with test data. Make sure to have the same `HARVEST_DATA_DIR` value set in the
 # environment variables of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
@@ -72,7 +72,7 @@ HARVEST_JOB_CONFIG_FILE=/tmp/cfg/harvest-job-config.xml
 # Big Data Crawler Server and Big Data Harvest Client.
 HARVEST_DATA_DIR=/tmp/big-data-harvest-data
 
-# Absolute path for the Big Data Harvest Client configuration file in the host machine (E.g.: /tmp/conf/harvest-client.cfg)
+# Absolute path of the Big Data Harvest Client configuration file in the host machine (E.g.: /tmp/conf/harvest-client.cfg)
 HARVEST_CLIENT_CONFIG_FILE=/tmp/cfg/harvest-client.cfg
 ```
 
@@ -118,9 +118,9 @@ TEST_DATA_URL=https://pds-gamma.jpl.nasa.gov/data/pds4/test-data/registry/urn-na
 
 | Variable                   | Description |
 | -------------------------- | ----------- |
-| HARVEST_JOB_CONFIG_FILE    | Absolute path for the Harvest job file in the host machine (E.g.: `/tmp/cfg/harvest-job-config.xml`) |
-| HARVEST_DATA_DIR           | Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
-| HARVEST_CLIENT_CONFIG_FILE | Absolute path for the Big Data Harvest Client configuration file in the host machine (E.g.: `/tmp/conf/harvest-client.cfg`) |
+| HARVEST_JOB_CONFIG_FILE    | Absolute path of the Harvest job file in the host machine (E.g.: `/tmp/cfg/harvest-job-config.xml`) |
+| HARVEST_DATA_DIR           | Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
+| HARVEST_CLIENT_CONFIG_FILE | Absolute path of the Big Data Harvest Client configuration file in the host machine (E.g.: `/tmp/conf/harvest-client.cfg`) |
 
 
 #### 3. Open a terminal and change the current working directory to `big-data-harvest-client/docker`.

@@ -42,10 +42,10 @@
 
 # Update the following environment variables before executing this script
 
-# Absolute path to the Harvest job file in the host machine (E.g.: /tmp/cfg/harvest-job-config.xml)
+# Absolute path of the Harvest job file in the host machine (E.g.: /tmp/cfg/harvest-job-config.xml)
 HARVEST_JOB_CONFIG_FILE=/tmp/cfg/harvest-job-config.xml
 
-# Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
+# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
 # If the Big Data Harvest Client is executed with the option to download test data, then this directory will be
 # cleaned-up and populated with test data. Make sure to have the same `HARVEST_DATA_DIR` value set in the
 # environment variables of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
@@ -53,7 +53,7 @@ HARVEST_JOB_CONFIG_FILE=/tmp/cfg/harvest-job-config.xml
 # Big Data Crawler Server and Big Data Harvest Client.
 HARVEST_DATA_DIR=/tmp/big-data-harvest-data
 
-# Absolute path to the Big Data Harvest Client configuration file in the host machine (E.g.: /tmp/conf/harvest-client.cfg)
+# Absolute path of the Big Data Harvest Client configuration file in the host machine (E.g.: /tmp/conf/harvest-client.cfg)
 HARVEST_CLIENT_CONFIG_FILE=/tmp/cfg/harvest-client.cfg
 
 # URL to download the test data to Harvest (only required, if executing with test data)
@@ -62,7 +62,7 @@ TEST_DATA_URL=https://pds-gamma.jpl.nasa.gov/data/pds4/test-data/registry/urn-na
 # Check if the Harvest job file exists
 if [ ! -f "$HARVEST_JOB_CONFIG_FILE" ]; then
     echo "Error: The Harvest job file $HARVEST_JOB_CONFIG_FILE does not exist." \
-            "Set an absolute file path for an existing Harvest job file in the $0 file" \
+            "Set an absolute file path of an existing Harvest job file in the $0 file" \
             "as the environment variable 'HARVEST_JOB_CONFIG_FILE'." 1>&2
     exit 1
 fi
@@ -70,7 +70,7 @@ fi
 # Check if the Harvest data directory exists
 if [ ! -d "$HARVEST_DATA_DIR" ]; then
     echo "Error: The Harvest data directory $HARVEST_DATA_DIR does not exist." \
-            "Set an absolute directory path for an existing Harvest data directory in the $0 file" \
+            "Set an absolute directory path of an existing Harvest data directory in the $0 file" \
             "as the environment variable 'HARVEST_DATA_DIR'." 1>&2
     exit 1
 fi
@@ -78,7 +78,7 @@ fi
 # Check if the Big Data Harvest Client configuration file exists
 if [ ! -f "$HARVEST_CLIENT_CONFIG_FILE" ]; then
     echo "Error: The Big Data Harvest Client configuration file $HARVEST_CLIENT_CONFIG_FILE does not exist." \
-            "Set an absolute file path for an existing Big Data Harvest Client configuration file in the $0 file" \
+            "Set an absolute file path of an existing Big Data Harvest Client configuration file in the $0 file" \
             "as the environment variable 'HARVEST_CLIENT_CONFIG_FILE'." 1>&2
     exit 1
 fi
