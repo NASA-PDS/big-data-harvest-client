@@ -14,9 +14,9 @@ import org.apache.commons.cli.ParseException;
 import gov.nasa.pds.harvest.cmd.CliCommand;
 import gov.nasa.pds.harvest.cmd.HarvestCmd;
 import gov.nasa.pds.harvest.cmd.SetArchiveStatusCmd;
-import gov.nasa.pds.harvest.util.ExceptionUtils;
 import gov.nasa.pds.harvest.util.Logger;
-import gov.nasa.pds.harvest.util.ManifestUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.util.ManifestUtils;
 
 
 /**

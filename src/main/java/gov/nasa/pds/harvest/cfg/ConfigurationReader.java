@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import gov.nasa.pds.harvest.util.CloseUtils;
 import gov.nasa.pds.harvest.util.Logger;
+import gov.nasa.pds.registry.common.util.CloseUtils;
 
 
 /**

@@ -12,8 +12,8 @@ import com.rabbitmq.client.MessageProperties;
 import gov.nasa.pds.harvest.Constants;
 import gov.nasa.pds.harvest.cfg.IPAddress;
 import gov.nasa.pds.harvest.cfg.RabbitMQCfg;
-import gov.nasa.pds.harvest.util.CloseUtils;
 import gov.nasa.pds.harvest.util.Logger;
+import gov.nasa.pds.registry.common.util.CloseUtils;
 
 /**
  * RabbitMQ publisher
