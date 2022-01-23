@@ -7,8 +7,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import gov.nasa.pds.harvest.job.model.FileRefCfg;
-import gov.nasa.pds.harvest.util.xml.XPathUtils;
-import gov.nasa.pds.harvest.util.xml.XmlDomUtils;
+import gov.nasa.pds.registry.common.util.xml.XPathUtils;
+import gov.nasa.pds.registry.common.util.xml.XmlDomUtils;
 
 
 /**
