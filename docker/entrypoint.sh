@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 # ------------------------------------------------------------------------------
-# This shell script provides an entrypoint for the Big Data Harvest Client docker image.
+# This shell script provides an entrypoint for the Registry Harvest CLI docker image.
 # ------------------------------------------------------------------------------
 
 # Download test data to 'HARVEST_DATA_DIR', if the 'RUN_TESTS' environment variable is set to true.
@@ -50,5 +50,5 @@ if [ "$RUN_TESTS" = "true" ]; then
   rm -f /tmp/harvest-test-data.tar.gz
 fi
 
-# Execute Big Data Harvest Client
+# Execute Registry Harvest CLI
 harvest-client harvest -j /cfg/harvest-job-config.xml -c /cfg/harvest-client.cfg
