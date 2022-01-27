@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-# Copyright 2019, California Institute of Technology ("Caltech").
+# Copyright 2022, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
 # All rights reserved.
@@ -30,31 +28,24 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+FROM openjdk:11-slim
 
-# Check Java
-if [ -n "$JAVA_HOME" ]; then
-    JAVA="$JAVA_HOME/bin/java"
-    if [ ! -f "$JAVA" ]; then
-        echo "Could not find java in JAVA_HOME=$JAVA_HOME"
-        exit 1
-    fi
-else
-    $(java -version > /dev/null 2>&1)
-    if [[ $? -ne 0 ]] ; then
-        echo "Java 11 or later is required to run Harvest Client."
-        exit 1
-    fi
-    JAVA=java
-fi
+# Set following argument with a compatible Registry Harvest CLI version
+ARG registry_harvest_cli_version=1.0.0-SNAPSHOT
 
-# Home
-SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
-HARVEST_CLIENT_HOME=$(cd ${SCRIPT_DIR}/.. && pwd)
-export HARVEST_CLIENT_HOME
+ENV REGISTRY_HARVEST_CLI_BIN_PATH=https://github.com/NASA-PDS/registry-harvest-cli/releases/download/v${registry_harvest_cli_version}/registry-harvest-cli-${registry_harvest_cli_version}-bin.tar.gz
 
-# Executable Jar
-TOOL_JARS=(${HARVEST_CLIENT_HOME}/dist/registry-harvest-cli-*.jar)
-TOOL_JAR=${TOOL_JARS[0]}
+# Install Registry Harvest CLI
+ADD $REGISTRY_HARVEST_CLI_BIN_PATH /tmp/registry-harvest-cli-bin.tar.gz
+RUN  apt-get update -y &&\
+     apt-get install curl -y &&\
+     mkdir /opt/registry-harvest-cli &&\
+     tar xzf /tmp/registry-harvest-cli-bin.tar.gz  -C /opt/registry-harvest-cli --strip-components 1 &&\
+     rm -f /tmp/registry-harvest-cli-bin.tar.gz &&\
+     apt-get autoclean --quiet --yes &&\
+     rm -rf /var/lib/apt/lists/*
+ENV PATH="$PATH:/opt/registry-harvest-cli/bin"
 
-# Run Harvest
-"$JAVA" -jar "$TOOL_JAR" $@
+# Entry point
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["bash", "/usr/local/bin/entrypoint.sh"]

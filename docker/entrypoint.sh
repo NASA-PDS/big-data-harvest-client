@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-# Copyright 2019, California Institute of Technology ("Caltech").
+# Copyright 2022, California Institute of Technology ("Caltech").
 # U.S. Government sponsorship acknowledged.
 #
 # All rights reserved.
@@ -30,31 +30,25 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# ------------------------------------------------------------------------------
+# This shell script provides an entrypoint for the Registry Harvest CLI docker image.
+# ------------------------------------------------------------------------------
 
-# Check Java
-if [ -n "$JAVA_HOME" ]; then
-    JAVA="$JAVA_HOME/bin/java"
-    if [ ! -f "$JAVA" ]; then
-        echo "Could not find java in JAVA_HOME=$JAVA_HOME"
-        exit 1
-    fi
-else
-    $(java -version > /dev/null 2>&1)
-    if [[ $? -ne 0 ]] ; then
-        echo "Java 11 or later is required to run Harvest Client."
-        exit 1
-    fi
-    JAVA=java
+# Download test data to 'HARVEST_DATA_DIR', if the 'RUN_TESTS' environment variable is set to true.
+if [ "$RUN_TESTS" = "true" ]; then
+
+  # Check if the TEST_DATA_URL environment variable is set
+  if [ -z "$TEST_DATA_URL" ]; then
+      echo "Error: 'TEST_DATA_URL' environment variable is not set. Use docker's -e option." 1>&2
+      exit 1
+  fi
+
+  rm -rf /data/*
+  mkdir /data/test-data
+  curl -o /tmp/harvest-test-data.tar.gz "$TEST_DATA_URL"
+  tar xzf /tmp/harvest-test-data.tar.gz -C /data/test-data --strip-components 1
+  rm -f /tmp/harvest-test-data.tar.gz
 fi
 
-# Home
-SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
-HARVEST_CLIENT_HOME=$(cd ${SCRIPT_DIR}/.. && pwd)
-export HARVEST_CLIENT_HOME
-
-# Executable Jar
-TOOL_JARS=(${HARVEST_CLIENT_HOME}/dist/registry-harvest-cli-*.jar)
-TOOL_JAR=${TOOL_JARS[0]}
-
-# Run Harvest
-"$JAVA" -jar "$TOOL_JAR" $@
+# Execute Registry Harvest CLI
+harvest-client harvest -j /cfg/harvest-job-config.xml -c /cfg/harvest-client.cfg

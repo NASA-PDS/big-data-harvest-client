@@ -52,18 +52,18 @@ POSSIBILITY OF SUCH DAMAGE.
     </parent>
   
     <properties>
-        <project-name>Big Data Harvest Client</project-name>
+        <project-name>Registry Harvest CLI</project-name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <groupId>gov.nasa.pds</groupId>
-    <artifactId>big-data-harvest-client</artifactId>
+    <artifactId>registry-harvest-cli</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project-name}</name>
     <description>
-        Put a short paragraph-sized summary of the project here.
+        A command-line client to submit jobs / commands to Harvest and Crawler web services.
     </description>
 
     <inceptionYear>2021</inceptionYear>
