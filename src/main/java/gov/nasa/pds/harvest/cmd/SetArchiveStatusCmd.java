@@ -25,6 +25,7 @@ public class SetArchiveStatusCmd extends BaseCliCommand
     private String status;
     private String requestId;
     
+    
     /**
      * Constructor
      */
@@ -33,7 +34,10 @@ public class SetArchiveStatusCmd extends BaseCliCommand
         statusNames = new TreeSet<>();
         statusNames.add("staged");
         statusNames.add("archived");
+        statusNames.add("certified");
+        statusNames.add("restricted");
     }
+    
     
     /**
      * Run this command.
