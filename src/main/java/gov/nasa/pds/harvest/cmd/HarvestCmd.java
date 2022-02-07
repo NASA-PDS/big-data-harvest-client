@@ -5,14 +5,10 @@ import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 
-import gov.nasa.pds.harvest.cfg.Configuration;
-import gov.nasa.pds.harvest.cfg.ConfigurationReader;
 import gov.nasa.pds.harvest.job.JobReader;
 import gov.nasa.pds.harvest.job.model.Job;
-import gov.nasa.pds.harvest.mq.ActiveMQPublisher;
 import gov.nasa.pds.harvest.mq.MQPublisher;
-import gov.nasa.pds.harvest.mq.RabbitMQPublisher;
-import gov.nasa.pds.harvest.mq.msg.JobMessageBuilder;
+import gov.nasa.pds.harvest.mq.msg.HarvestJobMessageBuilder;
 import gov.nasa.pds.harvest.util.Logger;
 
 
@@ -20,9 +16,8 @@ import gov.nasa.pds.harvest.util.Logger;
  * A CLI command to submit (publish to RabbitMQ) new harvest job. 
  * @author karpenko
  */
-public class HarvestCmd implements CliCommand
+public class HarvestCmd extends BaseCliCommand
 {
-    private Configuration cfg;
     private Job job;
     private boolean overwriteFlag;
     private String jobId;
@@ -63,16 +58,16 @@ public class HarvestCmd implements CliCommand
     private void publish() throws Exception
     {
         jobId = UUID.randomUUID().toString();
-        Logger.info("Creating new job...");
+        Logger.info("Creating new harvest job...");
     
         // Create new job message
         String msg = createNewJobMessage();
         
-        MQPublisher pub = createPublisher(cfg);
+        MQPublisher pub = createPublisher(clientCfg);
         
         try
         {
-            pub.publish(msg);
+            pub.publishHarvestJob(msg);
         }
         finally
         {
@@ -83,28 +78,9 @@ public class HarvestCmd implements CliCommand
     }
     
     
-    private MQPublisher createPublisher(Configuration cfg) throws Exception
-    {
-        if(cfg == null || cfg.mqType == null)
-        {
-            throw new Exception("Invalid configuration. Message server type is not set.");
-        }
-        
-        switch(cfg.mqType)
-        {
-        case ActiveMQ:
-            return new ActiveMQPublisher(cfg.amqCfg);
-        case RabbitMQ:
-            return new RabbitMQPublisher(cfg.rmqCfg);
-        }
-        
-        throw new Exception("Invalid message server type: " + cfg.mqType);
-    }
-    
-    
     private String createNewJobMessage() throws Exception
     {
-        JobMessageBuilder bld = new JobMessageBuilder(Logger.getLevel() == Logger.LEVEL_DEBUG);
+        HarvestJobMessageBuilder bld = new HarvestJobMessageBuilder(Logger.getLevel() == Logger.LEVEL_DEBUG);
         bld.setJob(jobId, job);
         bld.setOverwriteFlag(overwriteFlag);
         String json = bld.build();
@@ -126,10 +102,11 @@ public class HarvestCmd implements CliCommand
         System.out.println("Submit new harvest job");
         System.out.println();
         System.out.println("Required parameters:");
-        System.out.println("  -j <path>   Harvest job file");
+        System.out.println("  -j <path>    Harvest job file");
         System.out.println();
         System.out.println("Optional parameters:");
-        System.out.println("  -c <path>    Harvest Client configuration file. Default is $HARVEST_CLIENT_HOME/conf/harvest.cfg");
+        System.out.println("  -c <path>    Harvest Client configuration file.");
+        System.out.println("               Default is CLIENT_HOME/conf/harvest-client.cfg");
         System.out.println("  -overwrite   Overwrite registered products");
         System.out.println();
     }
@@ -137,31 +114,15 @@ public class HarvestCmd implements CliCommand
     
     private void configure(CommandLine cmdLine) throws Exception
     {
+        loadConfigurationFile(cmdLine);
+        
         // Job file
         String fileName = cmdLine.getOptionValue("j");
         if(fileName == null) throw new Exception("Missing required parameter '-j'");
         job = readJobFile(fileName);
-                
-        // Configuration file
-        fileName = cmdLine.getOptionValue("c");
-        cfg = readConfigFile(fileName);
-        
-        overwriteFlag = cmdLine.hasOption("overwrite");
-    }
-    
-    
-    private Configuration readConfigFile(String fileName) throws Exception
-    {
-        File file = getConfigFile(fileName);
-        if(!file.exists()) 
-        {
-            throw new Exception("Configuration file " + file.getAbsolutePath() + " does not exist");
-        }
 
-        Logger.info("Reading configuration from " + file.getAbsolutePath());        
-        
-        ConfigurationReader reader = new ConfigurationReader();
-        return reader.read(file);
+        // Overwrite flag
+        overwriteFlag = cmdLine.hasOption("overwrite");
     }
     
     
@@ -177,30 +138,6 @@ public class HarvestCmd implements CliCommand
         
         JobReader reader = new JobReader();
         return reader.read(file);
-    }
-    
-    
-    private File getConfigFile(String fileName) throws Exception
-    {
-        File file;
-        
-        if(fileName == null)
-        {
-            String home = System.getenv("HARVEST_CLIENT_HOME");
-            if(home == null) 
-            {
-                String msg = "HARVEST_CLIENT_HOME environment variable is not set. Could not get default configuration file.";
-                throw new Exception(msg);
-            }
-    
-            file = new File(home, "conf/harvest-client.cfg");
-        }
-        else
-        {
-            file = new File(fileName);
-        }
-
-        return file;
     }
     
 }

@@ -15,7 +15,7 @@ import gov.nasa.pds.harvest.job.parser.FileInfoParser;
 import gov.nasa.pds.harvest.job.parser.FileSetParser;
 import gov.nasa.pds.harvest.job.parser.FiltersParser;
 import gov.nasa.pds.harvest.job.parser.NodeNameValidator;
-import gov.nasa.pds.harvest.util.xml.XmlDomUtils;
+import gov.nasa.pds.registry.common.util.xml.XmlDomUtils;
 
 
 /**
