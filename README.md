@@ -3,8 +3,11 @@
 Command-line-interface client application for submitting asynchronous jobs (commands) to the 
 cluster of Crawler and Harvest servers.
 This application is different from the standalone Harvest Tool.
+
 It has to be used with other components, such as RabbitMQ message broker, Harvest Server and Harvest Client 
 to enable performant ingestion of large data sets into PDS Registry.
+
+The description of the full application is available on https://nasa-pds.github.io/registry-harvest-service/ . A facilities to launch the full application (including this components) are provided in the registry repository (see https://github.com/NASA-PDS/registry/tree/main/docker).
 
 * [📀 Installation](#---installation)
 * [💁‍♀️ Usage](#------usage)
