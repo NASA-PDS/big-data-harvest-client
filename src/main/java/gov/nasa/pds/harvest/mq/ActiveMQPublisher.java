@@ -9,9 +9,9 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import gov.nasa.pds.harvest.Constants;
 import gov.nasa.pds.harvest.cfg.ActiveMQCfg;
 import gov.nasa.pds.harvest.util.Logger;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
 
 
 /**
@@ -50,12 +50,12 @@ public class ActiveMQPublisher implements MQPublisher
         session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
         
         // Harvest destination
-        harvestDestination = session.createQueue(Constants.MQ_HARVEST_JOBS);        
+        harvestDestination = session.createQueue(MQConstants.MQ_JOBS);        
         harvestJobProducer = session.createProducer(harvestDestination);
         harvestJobProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
         
         // Manager destination
-        managerDestination = session.createQueue(Constants.MQ_MANAGER_COMMANDS);        
+        managerDestination = session.createQueue(MQConstants.MQ_MANAGER_COMMANDS);        
         managerCommandProducer = session.createProducer(managerDestination);
         managerCommandProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
     }

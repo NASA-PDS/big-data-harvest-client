@@ -9,10 +9,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
 
-import gov.nasa.pds.harvest.Constants;
 import gov.nasa.pds.harvest.cfg.IPAddress;
 import gov.nasa.pds.harvest.cfg.RabbitMQCfg;
 import gov.nasa.pds.harvest.util.Logger;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
 import gov.nasa.pds.registry.common.util.CloseUtils;
 
 /**
@@ -40,7 +40,7 @@ public class RabbitMQPublisher implements MQPublisher
     public void publishHarvestJob(String message) throws Exception
     {
         channel.txSelect();
-        channel.basicPublish("", Constants.MQ_HARVEST_JOBS, 
+        channel.basicPublish("", MQConstants.MQ_JOBS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, message.getBytes());
         channel.txCommit();
     }
@@ -50,7 +50,7 @@ public class RabbitMQPublisher implements MQPublisher
     public void publishManagerCommand(String message) throws Exception
     {
         channel.txSelect();
-        channel.basicPublish("", Constants.MQ_MANAGER_COMMANDS, 
+        channel.basicPublish("", MQConstants.MQ_MANAGER_COMMANDS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, message.getBytes());
         channel.txCommit();
     }

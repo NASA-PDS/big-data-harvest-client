@@ -5,6 +5,8 @@ import java.util.TreeMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import gov.nasa.pds.registry.common.mq.msg.ManagerMessage;
+
 
 /**
  * Creates manager messages to be sent to RabbitMQ.
