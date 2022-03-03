@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import gov.nasa.pds.harvest.job.model.FileRefCfg;
 import gov.nasa.pds.harvest.job.model.Job;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
 
 
 /**
@@ -74,7 +75,7 @@ public class HarvestJobMessageBuilder
         if(job == null) throw new Exception("Job is not set.");
         
         // Create the message
-        HarvestJobMessage msg = new HarvestJobMessage();
+        JobMessage msg = new JobMessage();
         msg.jobId = jobId;
         msg.nodeName = job.nodeName;
         msg.overwrite = overwriteFlag;
@@ -110,9 +111,6 @@ public class HarvestJobMessageBuilder
                 msg.fileRefs.add(msgItem);
             }
         }
-        
-        // Date Fields (/autogenFields/dateFields/field)
-        msg.dateFields = job.dateFields;
         
         return gson.toJson(msg);
     }

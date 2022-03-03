@@ -21,5 +21,4 @@ public class Job
 
     public Set<String> prodClassInclude;
     public Set<String> prodClassExclude;
-    public Set<String> dateFields;
 }
