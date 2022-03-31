@@ -6,7 +6,7 @@
 
 | Variable                        | Description |
 | ------------------------------- | ------------|
-| registry_harvest_cli_version | The version of the Registry Harvest CLI release to be included in the docker image|
+| registry_harvest_cli_version    | The version of the Registry Harvest CLI release to be included in the docker image|
 
 ```    
 # Set following argument with a compatible Registry Harvest CLI version
@@ -106,12 +106,16 @@ Above steps will run a docker container of the Registry Harvest CLI.
 | Variable          | Description |
 | ----------------- | ----------- |
 | TEST_DATA_URL     | URL to download the test data to harvest |
+| TEST_DATA_LIDVID  | The lidvid of the test data, which is used to set the archive status |
 
 ```    
 # Update the following environment variable before executing this script
 
 # URL to download the test data to Harvest (only required, if executing with test data)
 TEST_DATA_URL=https://pds-gamma.jpl.nasa.gov/data/pds4/test-data/registry/urn-nasa-pds-insight_rad.tar.gz
+
+# The lidvid of the test data, which is used to set the archive status (only required, if executing with test data)
+TEST_DATA_LIDVID=urn:nasa:pds:insight_rad::2.1
 ```
 
 #### 2. Make sure that the following environment variables are set with correct values as explained in the previous section.

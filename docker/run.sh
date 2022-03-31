@@ -59,6 +59,9 @@ HARVEST_CLIENT_CONFIG_FILE=/tmp/cfg/harvest-client.cfg
 # URL to download the test data to Harvest (only required, if executing with test data)
 TEST_DATA_URL=https://pds-gamma.jpl.nasa.gov/data/pds4/test-data/registry/urn-nasa-pds-insight_rad.tar.gz
 
+# The lidvid of the test data, which is used to set the archive status (only required, if executing with test data)
+TEST_DATA_LIDVID=urn:nasa:pds:insight_rad::2.1
+
 # Check if the Harvest job file exists
 if [ ! -f "$HARVEST_JOB_CONFIG_FILE" ]; then
     echo "Error: The Harvest job file $HARVEST_JOB_CONFIG_FILE does not exist." \
@@ -103,6 +106,7 @@ else
                  --rm \
                  --env RUN_TESTS=true \
                  --env TEST_DATA_URL="${TEST_DATA_URL}" \
+                 --env TEST_DATA_LIDVID="${TEST_DATA_LIDVID}" \
                  --volume "${HARVEST_JOB_CONFIG_FILE}":/cfg/harvest-job-config.xml \
                  --volume "${HARVEST_DATA_DIR}":/data \
                  --volume "${HARVEST_CLIENT_CONFIG_FILE}":/cfg/harvest-client.cfg \

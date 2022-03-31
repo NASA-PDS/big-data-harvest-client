@@ -52,3 +52,11 @@ fi
 
 # Execute Registry Harvest CLI
 harvest-client harvest -j /cfg/harvest-job-config.xml -c /cfg/harvest-client.cfg
+
+echo "Waiting for Harvest job to process ..." 1>&2
+sleep 1m
+
+if [ "$RUN_TESTS" = "true" ]; then
+  echo "Setting archive status ..." 1>&2
+  harvest-client set-archive-status -status archived -lidvid "$TEST_DATA_LIDVID" -c /cfg/harvest-client.cfg
+fi
