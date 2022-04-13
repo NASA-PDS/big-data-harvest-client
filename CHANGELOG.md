@@ -1,17 +1,13 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-harvest-cli/tree/«unknown») (2022-03-31)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.0-SNAPSHOT) (2022-03-31)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.0-SNAPSHOT...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/f21d28932d4e224d97686ac49fc2e4620a8c93fa...v1.0.0-SNAPSHOT)
 
 **Other closed issues:**
 
 - Update harvest cli to set default archive status to staged [\#8](https://github.com/NASA-PDS/registry-harvest-cli/issues/8)
 - Update harvest client to support ability to update archive status [\#2](https://github.com/NASA-PDS/registry-harvest-cli/issues/2)
-
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.0-SNAPSHOT) (2022-02-10)
-
-[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/f21d28932d4e224d97686ac49fc2e4620a8c93fa...v1.0.0-SNAPSHOT)
 
 
 
