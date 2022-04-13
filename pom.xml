@@ -58,7 +58,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <groupId>gov.nasa.pds</groupId>
     <artifactId>registry-harvest-cli</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project-name}</name>
@@ -120,7 +120,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <dependency>
             <groupId>gov.nasa.pds</groupId>
             <artifactId>registry-common</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 
