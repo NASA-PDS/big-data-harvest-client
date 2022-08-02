@@ -59,4 +59,5 @@ sleep 1m
 if [ "$RUN_TESTS" = "true" ]; then
   echo "Setting archive status ..." 1>&2
   harvest-client set-archive-status -status archived -lidvid "$TEST_DATA_LIDVID" -c /cfg/harvest-client.cfg
+  harvest-client set-archive-status -status staged -lidvid "urn:nasa:pds:insight_rad:data_calibrated::7.0" -c /cfg/harvest-client.cfg
 fi
