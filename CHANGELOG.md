@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.1](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.1) (2022-08-02)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.1-SNAPSHOT...v1.0.1)
+
 ## [v1.0.1-SNAPSHOT](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.1-SNAPSHOT) (2022-08-02)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.0...v1.0.1-SNAPSHOT)
