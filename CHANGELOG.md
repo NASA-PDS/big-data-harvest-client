@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/registry-harvest-cli/tree/«unknown») (2023-03-21)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.4...«unknown»)
+
+**Defects:**
+
+- Default password does not match that of registry docker repo [\#18](https://github.com/NASA-PDS/registry-harvest-cli/issues/18)
+
 ## [v1.0.4](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.4) (2022-12-14)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.2...v1.0.4)
