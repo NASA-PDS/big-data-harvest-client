@@ -1,6 +1,6 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-harvest-cli/tree/«unknown») (2023-03-21)
+## [«unknown»](https://github.com/NASA-PDS/registry-harvest-cli/tree/«unknown») (2023-04-04)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.4...«unknown»)
 
