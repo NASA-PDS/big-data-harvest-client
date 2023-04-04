@@ -7,6 +7,7 @@
 **Defects:**
 
 - Default password does not match that of registry docker repo [\#18](https://github.com/NASA-PDS/registry-harvest-cli/issues/18)
+- Stable Roundup can no longer trigger Imaging workflow [\#16](https://github.com/NASA-PDS/registry-harvest-cli/issues/16)
 
 ## [v1.0.4](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.4) (2022-12-14)
 
