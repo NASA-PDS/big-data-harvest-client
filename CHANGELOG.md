@@ -1,8 +1,8 @@
 # Changelog
 
-## [release/1.0.5](https://github.com/NASA-PDS/registry-harvest-cli/tree/release/1.0.5) (2023-04-04)
+## [v1.0.5](https://github.com/NASA-PDS/registry-harvest-cli/tree/v1.0.5) (2023-04-04)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.4...release/1.0.5)
+[Full Changelog](https://github.com/NASA-PDS/registry-harvest-cli/compare/v1.0.4...v1.0.5)
 
 **Defects:**
 
