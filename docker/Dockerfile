@@ -28,7 +28,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM openjdk:11-slim
+FROM openjdk:18-slim
 
 # Set following argument with a compatible Registry Harvest CLI version
 ARG registry_harvest_cli_version=1.1.0
